@@ -3,7 +3,7 @@ version: '3.3'
 services:
 
   traefik:
-    image: traefik:v3.0
+    image: traefik:v2.10
     ports:
       - 80:80
       - 443:443
@@ -35,7 +35,7 @@ services:
       - --providers.docker
       - --providers.docker.constraints=Label(`traefik.constraint-label`, `traefik-public`)
       - --providers.docker.exposedbydefault=false
-      - --providers.swarm.endpoint=unix:///var/run/docker.sock
+      - --providers.docker.swarmmode
       - --entrypoints.http.address=:80
       - --entrypoints.https.address=:443
       - --certificatesresolvers.le.acme.email=${EMAIL?Variable not set}
