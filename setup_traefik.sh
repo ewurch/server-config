@@ -2,7 +2,7 @@
 docker swarm init
 
 # Create the newtowrk that will be used by all services accessible by Traefik
-docker network create --driver=overlay traefik-public
+docker network create -d overlay traefik-public
 
 # Add a label to node so traefik always deploys to it
 export NODE_ID=$(docker info -f '{{.Swarm.NodeID}}')
