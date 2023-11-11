@@ -1,0 +1,5 @@
+CREATE DATABASE yourdb;
+
+CREATE USER youruser WITH ENCRYPTED PASSWORD 'yourpass';
+
+ALTER DATABASE yourdb OWNER TO youruser;
