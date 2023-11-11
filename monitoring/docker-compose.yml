@@ -17,7 +17,9 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.middlewares.admin-auth.basicauth.users=${USERNAME?Variable not set}:${HASHED_PASSWORD?Variable not set}
+        - traefik.http.routers.prometheus.rule=Host(`prometheus.daosoftware.com.br`)
+        - traefik.http.routers.prometheus.entrypoints=http
+        - traefik.http.routers.prometheus.middlewares=https-redirect
         - traefik.http.routers.prometheus-https.rule=Host(`prometheus.daosoftware.com.br`)
         - traefik.http.routers.prometheus-https.entrypoints=https
         - traefik.http.routers.prometheus-https.tls=true
@@ -35,7 +37,9 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.middlewares.admin-auth.basicauth.users=${USERNAME?Variable not set}:${HASHED_PASSWORD?Variable not set}
+        - traefik.http.routers.grafana.rule=Host(`grafana.daosoftware.com.br`)
+        - traefik.http.routers.grafana.entrypoints=http
+        - traefik.http.routers.grafana.middlewares=https-redirect
         - traefik.http.routers.grafana-https.rule=Host(`grafana.daosoftware.com.br`)
         - traefik.http.routers.grafana-https.entrypoints=https
         - traefik.http.routers.grafana-https.tls=true

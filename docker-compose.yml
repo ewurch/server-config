@@ -7,6 +7,7 @@ services:
     ports:
       - 80:80
       - 443:443
+      - 8082:8082
     deploy:
       placement:
         constraints:
@@ -27,6 +28,9 @@ services:
         - traefik.http.routers.traefik-public-https.service=api@internal
         - traefik.http.routers.traefik-public-https.tls.certresolver=le
         - traefik.http.routers.traefik-public-https.middlewares=admin-auth
+        - traefik.http.routers.traefik-metrics.rule=Path(`/metrics`)
+        - traefik.http.routers.traefik-metrics.entrypoints=metrics
+        - traefik.http.routers.traefik-metrics.service=api@internal
         - traefik.http.services.traefik-public.loadbalancer.server.port=8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -41,6 +45,9 @@ services:
       - --certificatesresolvers.le.acme.email=${EMAIL?Variable not set}
       - --certificatesresolvers.le.acme.storage=/certificates/acme.json
       - --certificatesresolvers.le.acme.tlschallenge=true
+      - --metrics.prometheus=true
+      - --metrics.prometheus.entryPoint=metrics
+      - --entrypoints.metrics.address=:8082
       - --accesslog
       - --log
       - --api
