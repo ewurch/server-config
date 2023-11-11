@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - prometheus_data:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    networks:
+      - traefik-public
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.http.middlewares.admin-auth.basicauth.users=${USERNAME?Variable not set}:${HASHED_PASSWORD?Variable not set}
+        - traefik.http.routers.prometheus.rule=Host(`prometheus.daosoftware.com.br`)
+        - traefik.http.routers.prometheus.entrypoints=https
+        - traefik.http.routers.prometheus-https.tls=true
+        - traefik.http.routers.prometheus.tls.certresolver=le
+        - traefik.http.services.prometheus.loadbalancer.server.port=9090
+
+  grafana:
+    image: grafana/grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - traefik-public
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.http.middlewares.admin-auth.basicauth.users=${USERNAME?Variable not set}:${HASHED_PASSWORD?Variable not set}
+        - traefik.http.routers.grafana.rule=Host(`grafana.daosoftware.com.br`)
+        - traefik.http.routers.grafana.entrypoints=https
+        - traefik.http.routers.grafana-https.tls=true
+        - traefik.http.routers.grafana.tls.certresolver=le
+        - traefik.http.services.grafana.loadbalancer.server.port=3000
+
+
+volumes:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  traefik-public:
+    external: true
