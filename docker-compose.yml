@@ -7,31 +7,26 @@ services:
     ports:
       - 80:80
       - 443:443
-      - 8080:8080
     deploy:
       placement:
         constraints:
           - node.labels.traefik-public.traefik-public-certificates == true
       labels:
+        # Enable and config Traefik
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
+        # Create auth and redirect middlewares
         - traefik.http.middlewares.admin-auth.basicauth.users=${USERNAME?Variable not set}:${HASHED_PASSWORD?Variable not set}
         - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
         - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
-        - traefik.http.routers.traefik-public-http.rule=Host(`${DOMAIN?Variable not set}`)
-        - traefik.http.routers.traefik-public-http.entrypoints=http
-        - traefik.http.routers.traefik-public-http.middlewares=https-redirect
+        # Configure Https 
         - traefik.http.routers.traefik-public-https.rule=Host(`${DOMAIN?Variable not set}`)
         - traefik.http.routers.traefik-public-https.entrypoints=https
         - traefik.http.routers.traefik-public-https.tls=true
         - traefik.http.routers.traefik-public-https.service=api@internal
         - traefik.http.routers.traefik-public-https.tls.certresolver=le
         - traefik.http.routers.traefik-public-https.middlewares=admin-auth
-        # Metrics labels
-        - traefik.http.routers.traefik-metrics.rule=Path(`/metrics`)
-        - traefik.http.routers.traefik-metrics.entrypoints=metrics
-        - traefik.http.routers.traefik-metrics.service=api@internal
         - traefik.http.services.traefik-public.loadbalancer.server.port=8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -41,25 +36,20 @@ services:
       - --providers.docker.constraints=Label(`traefik.constraint-label`, `traefik-public`)
       - --providers.docker.exposedbydefault=false
       - --providers.docker.swarmmode
+      - --metrics.prometheus=true
       - --entrypoints.http.address=:80
       - --entrypoints.https.address=:443
       - --certificatesresolvers.le.acme.email=${EMAIL?Variable not set}
       - --certificatesresolvers.le.acme.storage=/certificates/acme.json
       - --certificatesresolvers.le.acme.tlschallenge=true
-      - --metrics.prometheus=true
-      - --metrics.prometheus.buckets=0.100000, 0.300000, 1.200000, 5.000000
-      - --metrics.prometheus.addEntryPointsLabels=true
-      - --metrics.prometheus.addServicesLabels=true
-      - --entryPoints.metrics.address=:8080
-      - --metrics.prometheus.entryPoint=metrics
       - --accesslog
       - --log
       - --api
     networks:
       - traefik-public
 
-volumes:
-  traefik-public-certificates
+volumes: 
+  traefik-public-certificates:
 
 networks:
   traefik-public:

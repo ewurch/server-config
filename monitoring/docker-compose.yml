@@ -17,19 +17,20 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.routers.prometheus.rule=Host(`prometheus.daosoftware.com.br`)
-        - traefik.http.routers.prometheus.entrypoints=http
-        - traefik.http.routers.prometheus.middlewares=https-redirect
         - traefik.http.routers.prometheus-https.rule=Host(`prometheus.daosoftware.com.br`)
         - traefik.http.routers.prometheus-https.entrypoints=https
         - traefik.http.routers.prometheus-https.tls=true
         - traefik.http.routers.prometheus-https.tls.certresolver=le
+        - traefik.http.routers.prometheus-https.middlewares=admin-auth
         - traefik.http.services.prometheus-https.loadbalancer.server.port=9090
         
   grafana:
     image: grafana/grafana
     volumes:
       - grafana_data:/var/lib/grafana
+    environment:
+      GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION: "true"
+      GF_INSTALL_PLUGINS: grafana-piechart-panel
     networks:
       - traefik-public
     deploy:
@@ -37,15 +38,12 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.routers.grafana.rule=Host(`grafana.daosoftware.com.br`)
-        - traefik.http.routers.grafana.entrypoints=http
-        - traefik.http.routers.grafana.middlewares=https-redirect
         - traefik.http.routers.grafana-https.rule=Host(`grafana.daosoftware.com.br`)
         - traefik.http.routers.grafana-https.entrypoints=https
         - traefik.http.routers.grafana-https.tls=true
         - traefik.http.routers.grafana-https.tls.certresolver=le
+        - traefik.http.routers.grafana-https.middlewares=admin-auth
         - traefik.http.services.grafana-https.loadbalancer.server.port=3000
-
 
 volumes:
   prometheus_data:

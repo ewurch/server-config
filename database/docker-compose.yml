@@ -5,6 +5,7 @@ services:
     image: postgres:latest
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./dumps/:/var/lib/postgresql/dumps
     environment:
       POSTGRES_USER: 'admin'
       POSTGRES_PASSWORD: postgres_password

@@ -10,9 +10,6 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.routers.whoami.rule=Host(`whoami.daosoftware.com.br`)
-        - traefik.http.routers.whoami.entrypoints=http
-        - traefik.http.routers.whoami.middlewares=https-redirect
         - traefik.http.routers.whoami-https.rule=Host(`whoami.daosoftware.com.br`)
         - traefik.http.routers.whoami-https.entrypoints=https
         - traefik.http.routers.whoami-https.tls=true
