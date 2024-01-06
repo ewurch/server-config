@@ -1,5 +1,6 @@
 # User setup
 ## Create user
-adduser ewurch
+read 'Username: ' username 
+adduser $username
 ## Add user to sudo group
-usermod -aG sudo ewurch
+usermod -aG sudo $username

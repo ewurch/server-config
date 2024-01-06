@@ -1,8 +1,5 @@
 # Dump current database into file
-```bash
-pg_dump -U database_owner database_name > database_name_20160527.sql
-```
-
+Use the dump.sh file located at /var/lib/postgresql/dumps
 
 # Create new database
 ```sql

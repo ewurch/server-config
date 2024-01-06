@@ -17,7 +17,7 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.routers.prometheus-https.rule=Host(`prometheus.daosoftware.com.br`)
+        - traefik.http.routers.prometheus-https.rule=Host(`prometheus.${DOMAIN}`)
         - traefik.http.routers.prometheus-https.entrypoints=https
         - traefik.http.routers.prometheus-https.tls=true
         - traefik.http.routers.prometheus-https.tls.certresolver=le
@@ -38,7 +38,7 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.routers.grafana-https.rule=Host(`grafana.daosoftware.com.br`)
+        - traefik.http.routers.grafana-https.rule=Host(`grafana.${DOMAIN}`)
         - traefik.http.routers.grafana-https.entrypoints=https
         - traefik.http.routers.grafana-https.tls=true
         - traefik.http.routers.grafana-https.tls.certresolver=le
