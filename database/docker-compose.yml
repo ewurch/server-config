@@ -16,7 +16,7 @@ services:
       restart_policy:
         condition: on-failure
   redis:
-    image: redis:latest
+    image: redis:7.2.4
     networks:
       - backend
     deploy:
