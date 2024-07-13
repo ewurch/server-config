@@ -3,6 +3,8 @@ version: '3.8'
 services:
   prometheus:
     image: prom/prometheus
+    env_file:
+      - ../.env
     volumes:
       - prometheus_data:/prometheus
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
@@ -26,6 +28,8 @@ services:
         
   grafana:
     image: grafana/grafana
+    env_file:
+      - ../.env
     volumes:
       - grafana_data:/var/lib/grafana
     environment:

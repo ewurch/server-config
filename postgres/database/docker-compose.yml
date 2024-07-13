@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:16.1
+    image: postgres:latest
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./dumps/:/var/lib/postgresql/dumps
@@ -15,8 +15,9 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
+
   redis:
-    image: redis:7.2.4
+    image: redis:latest
     networks:
       - backend
     deploy:

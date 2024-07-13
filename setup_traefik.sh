@@ -11,7 +11,7 @@ docker node update --label-add traefik-public.traefik-public-certificates=true $
 echo "Enter the email address you want to use for Let's Encrypt:"
 read EMAIL
 
-echo "Enter the domain you want to use for Traefik:"
+echo "Enter your cluster's main domain (traefikk dashboard will be available at traefik.DOMAIN)"
 read DOMAIN
 
 echo "Enter the password to access Traefik's dashboard:"
