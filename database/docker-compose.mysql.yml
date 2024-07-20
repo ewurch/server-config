@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - backend
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  backend:
+    driver: overlay
+    attachable: true

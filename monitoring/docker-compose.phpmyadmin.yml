@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  phpmyadmin:
+    image: phpmyadmin:latest
+    networks:
+      - backend
+      - traefik-public
+    environment:
+      PMA_HOST: database_mysql
+      PMA_ABSOLUTE_URI: https://pma.${DOMAIN}
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        # HTTPS Router
+        - traefik.http.routers.phpmyadmin-https.rule=Host(`pma.${DOMAIN}`)
+        - traefik.http.routers.phpmyadmin-https.entrypoints=https
+        - traefik.http.routers.phpmyadmin-https.tls=true
+        - traefik.http.routers.phpmyadmin-https.tls.certresolver=le
+        - traefik.http.services.phpmyadmin-https.loadbalancer.server.port=80
+        - traefik.http.routers.phpmyadmin-https.middlewares=admin-auth
+
+networks:
+  traefik-public:
+    external: true
+  backend:
+    external: true

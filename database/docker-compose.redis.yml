@@ -1,0 +1,17 @@
+
+version: '3.8'
+
+services:
+  redis:
+    image: redis:latest
+    networks:
+      - backend
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+networks:
+  backend:
+    driver: overlay
+    attachable: true
