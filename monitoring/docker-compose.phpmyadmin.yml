@@ -4,7 +4,7 @@ services:
   phpmyadmin:
     image: phpmyadmin:latest
     networks:
-      - backend
+      - database_backend
       - traefik-public
     environment:
       PMA_HOST: database_mysql
@@ -25,5 +25,5 @@ services:
 networks:
   traefik-public:
     external: true
-  backend:
+  database_backend:
     external: true
