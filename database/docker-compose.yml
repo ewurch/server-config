@@ -1,38 +1,28 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:latest
+  mysql:
+    image: mysql:latest
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - db_data:/var/lib/mysql
       - ./dumps/:/var/lib/postgresql/dumps
     environment:
-      POSTGRES_USER: 'admin'
-      POSTGRES_PASSWORD: postgres_password
+      MYSQL_ROOT_PASSWORD: examplepassword
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: examplepassword
     networks:
-      - backend
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-  redis:
-    image: redis:latest
-    networks:
-      - backend
+      - database_backend
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
 
-secrets:
-  postgres_password:
-    external: true
-          
 volumes:
-  postgres_data:
+  db_data:
     driver: local
 
 networks:
-  backend:
+  database_backend:
     driver: overlay
     attachable: true

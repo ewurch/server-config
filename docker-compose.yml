@@ -21,7 +21,7 @@ services:
         - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
         - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
         # Configure Https 
-        - traefik.http.routers.traefik-public-https.rule=Host(`${DOMAIN?Variable not set}`)
+        - traefik.http.routers.traefik-public-https.rule=Host(`traefik.${DOMAIN?Variable not set}`)
         - traefik.http.routers.traefik-public-https.entrypoints=https
         - traefik.http.routers.traefik-public-https.tls=true
         - traefik.http.routers.traefik-public-https.service=api@internal
